@@ -14,14 +14,20 @@ void my_dgemv(int n, double* A, double* x, double* y) {
    // insert your code here: implementation of vectorized vector-matrix multiply
     // go each row of the matrix A
     for (int i = 0; i < n; i++) {
-        double temp = y[i]; 
+        double temp = 0.0; 
+
+        // Precompute the row offset to avoid redundant calculations
+        int Row_Offset = i * n; 
 
         // Temporary variable to store the dot product
         // Compute the dot product of the i-th row of A with vector x
+
+        #pragma omp simd reduction(+:temp)
         
         for (int j = 0; j < n; j++) {
-            temp += A[i * n + j] * x[j];
+            temp += A[Row_Offset + j] * x[j];
         }
+
         y[i] += temp;
     }
 }
