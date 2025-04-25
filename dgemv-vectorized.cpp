@@ -22,8 +22,6 @@ void my_dgemv(int n, double* A, double* x, double* y) {
         // Temporary variable to store the dot product
         // Compute the dot product of the i-th row of A with vector x
 
-        #pragma omp simd reduction(+:temp)
-        
         for (int j = 0; j < n; j++) {
             temp += A[Row_Offset + j] * x[j];
         }
